@@ -1,0 +1,29 @@
+
+name: Sync to Hugging Face space
+
+on:
+  push:
+    branches:
+      - main # Or whichever branch you want to deploy from
+
+jobs:
+  sync-to-hub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          lfs: true
+
+      - name: Push to HF Space
+        env:
+          HF_SPACE_GIT_REPO: "https://huggingface.co/spaces/nssuwan186/Bot_telegram"
+        run: |
+          git remote add space "https://USER:${{ secrets.HF_TOKEN }}@huggingface.co/spaces/nssuwan186/Bot_telegram"
+          git push --force space main
+
+# IMPORTANT:
+# 1. Replace 'YOUR_HF_USERNAME' with your Hugging Face username.
+# 2. Replace 'YOUR_HF_SPACE_NAME' with your Hugging Face Space name.
+# 3. You must create a secret in your GitHub repository named 'HF_TOKEN'.
+#    This token should be a Hugging Face access token with 'write' permissions.
